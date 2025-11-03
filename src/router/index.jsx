@@ -8,6 +8,7 @@ const Courses = lazy(() => import("@/components/pages/Courses"));
 const Assignments = lazy(() => import("@/components/pages/Assignments"));
 const Calendar = lazy(() => import("@/components/pages/Calendar"));
 const Grades = lazy(() => import("@/components/pages/Grades"));
+const Students = lazy(() => import("@/components/pages/Students"));
 const NotFound = lazy(() => import("@/components/pages/NotFound"));
 
 // Suspense fallback component
@@ -41,9 +42,13 @@ const mainRoutes = [
     path: "calendar",
     element: <Suspense fallback={<SuspenseFallback />}><Calendar /></Suspense>
   },
-  {
+{
     path: "grades",
     element: <Suspense fallback={<SuspenseFallback />}><Grades /></Suspense>
+  },
+  {
+    path: "students",
+    element: <Suspense fallback={<SuspenseFallback />}><Students /></Suspense>
   },
   {
     path: "*",

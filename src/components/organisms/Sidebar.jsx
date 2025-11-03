@@ -28,10 +28,15 @@ const Sidebar = ({ isOpen, onClose }) => {
       href: "/calendar",
       icon: "Calendar",
     },
-    {
+{
       name: "Grades",
       href: "/grades",
       icon: "Trophy",
+    },
+    {
+      name: "Students",
+      href: "/students",
+      icon: "Users",
     },
   ];
 
