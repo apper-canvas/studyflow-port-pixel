@@ -99,10 +99,9 @@ const dueDateA = new Date(a.due_date_c || a.dueDate);
           const courseB = getCourseById(b.course_id_c || b.courseId)?.name || "";
           return courseA.localeCompare(courseB);
         case "title":
-          const titleA = a.title_c || a.title || "";
+const titleA = a.title_c || a.title || "";
           const titleB = b.title_c || b.title || "";
           return titleA.localeCompare(titleB);
-          return a.title.localeCompare(b.title);
         default:
           return 0;
       }
