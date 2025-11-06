@@ -58,36 +58,50 @@ const Assignments = () => {
 
   // Filter and sort assignments
   const filteredAssignments = assignments
-    .filter(assignment => {
-      const course = getCourseById(assignment.courseId);
-      const matchesSearch = assignment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          assignment.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+.filter(assignment => {
+      const course = getCourseById(assignment.course_id_c || assignment.courseId);
+      const title = assignment.title_c || assignment.title || "";
+      const description = assignment.description_c || assignment.description || "";
+      const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           course?.name.toLowerCase().includes(searchTerm.toLowerCase());
       
-      const matchesCourse = !filterCourse || assignment.courseId === filterCourse;
+      const courseId = assignment.course_id_c || assignment.courseId;
+      const matchesCourse = !filterCourse || courseId?.toString() === filterCourse;
+      
+const completed = assignment.completed_c !== undefined ? assignment.completed_c : assignment.completed;
+      const dueDate = assignment.due_date_c || assignment.dueDate;
+      const priority = assignment.priority_c || assignment.priority;
       
       const matchesStatus = !filterStatus || 
-        (filterStatus === "completed" && assignment.completed) ||
-        (filterStatus === "pending" && !assignment.completed) ||
-        (filterStatus === "overdue" && !assignment.completed && isOverdue(assignment.dueDate)) ||
-        (filterStatus === "due-today" && isDueToday(assignment.dueDate));
+        (filterStatus === "completed" && completed) ||
+        (filterStatus === "pending" && !completed) ||
+        (filterStatus === "overdue" && !completed && isOverdue(dueDate)) ||
+        (filterStatus === "due-today" && isDueToday(dueDate));
       
-      const matchesPriority = !filterPriority || assignment.priority === filterPriority;
+      const matchesPriority = !filterPriority || priority === filterPriority;
       
       return matchesSearch && matchesCourse && matchesStatus && matchesPriority;
     })
     .sort((a, b) => {
       switch (sortBy) {
         case "dueDate":
-          return new Date(a.dueDate) - new Date(b.dueDate);
+const dueDateA = new Date(a.due_date_c || a.dueDate);
+          const dueDateB = new Date(b.due_date_c || b.dueDate);
+          return dueDateA - dueDateB;
         case "priority":
           const priorityOrder = { high: 3, medium: 2, low: 1 };
-          return priorityOrder[b.priority] - priorityOrder[a.priority];
+          const priorityA = a.priority_c || a.priority;
+          const priorityB = b.priority_c || b.priority;
+          return priorityOrder[priorityB] - priorityOrder[priorityA];
         case "course":
-          const courseA = getCourseById(a.courseId)?.name || "";
-          const courseB = getCourseById(b.courseId)?.name || "";
+          const courseA = getCourseById(a.course_id_c || a.courseId)?.name || "";
+          const courseB = getCourseById(b.course_id_c || b.courseId)?.name || "";
           return courseA.localeCompare(courseB);
         case "title":
+          const titleA = a.title_c || a.title || "";
+          const titleB = b.title_c || b.title || "";
+          return titleA.localeCompare(titleB);
           return a.title.localeCompare(b.title);
         default:
           return 0;
@@ -103,12 +117,15 @@ const Assignments = () => {
       completed: []
     };
 
-    filteredAssignments.forEach(assignment => {
-      if (assignment.completed) {
+filteredAssignments.forEach(assignment => {
+      const completed = assignment.completed_c !== undefined ? assignment.completed_c : assignment.completed;
+      const dueDate = assignment.due_date_c || assignment.dueDate;
+      
+      if (completed) {
         groups.completed.push(assignment);
-      } else if (isOverdue(assignment.dueDate)) {
+      } else if (isOverdue(dueDate)) {
         groups.overdue.push(assignment);
-      } else if (isDueToday(assignment.dueDate)) {
+      } else if (isDueToday(dueDate)) {
         groups.dueToday.push(assignment);
       } else {
         groups.upcoming.push(assignment);
@@ -153,7 +170,7 @@ const Assignments = () => {
   const handleSaveAssignment = async (assignmentData) => {
     try {
       if (editingAssignment) {
-        await assignmentService.update(editingAssignment.Id, assignmentData);
+await assignmentService.update(editingAssignment.Id, assignmentData);
       } else {
         await assignmentService.create(assignmentData);
       }
@@ -183,7 +200,7 @@ const Assignments = () => {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Assignments</h1>
           <p className="text-gray-600">
-            {assignments.filter(a => !a.completed).length} pending • {assignments.filter(a => a.completed).length} completed
+{assignments.filter(a => !(a.completed_c !== undefined ? a.completed_c : a.completed)).length} pending • {assignments.filter(a => a.completed_c !== undefined ? a.completed_c : a.completed).length} completed
           </p>
         </div>
 

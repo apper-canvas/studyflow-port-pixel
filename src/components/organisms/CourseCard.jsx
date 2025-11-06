@@ -47,7 +47,7 @@ const CourseCard = ({ course, assignmentCount = 0, onEdit, onDelete }) => {
               style={{ backgroundColor: course.color }}
             />
             <div className="min-w-0 flex-1">
-              <h3 className="text-lg font-semibold text-gray-900 truncate">
+<h3 className="text-lg font-semibold text-gray-900 truncate">
                 {course.name}
               </h3>
               <p className="text-sm text-gray-600">

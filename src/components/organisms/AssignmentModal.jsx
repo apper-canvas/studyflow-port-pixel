@@ -25,14 +25,14 @@ const AssignmentModal = ({ isOpen, onClose, assignment, onSave, courses = [] }) 
     if (assignment) {
       const dueDate = assignment.dueDate ? format(new Date(assignment.dueDate), "yyyy-MM-dd'T'HH:mm") : "";
       setFormData({
-        courseId: assignment.courseId || "",
-        title: assignment.title || "",
-        description: assignment.description || "",
+courseId: (assignment.course_id_c || assignment.courseId || "").toString(),
+        title: assignment.title_c || assignment.title || "",
+        description: assignment.description_c || assignment.description || "",
         dueDate: dueDate,
-        priority: assignment.priority || "medium",
-        type: assignment.type || "Assignment",
-        weight: assignment.weight || 1,
-        completed: assignment.completed || false
+        priority: assignment.priority_c || assignment.priority || "medium",
+        type: assignment.type_c || assignment.type || "Assignment",
+        weight: assignment.weight_c || assignment.weight || 1,
+        completed: assignment.completed_c !== undefined ? assignment.completed_c : assignment.completed || false
       });
     } else {
       const tomorrow = new Date();
@@ -72,10 +72,15 @@ const AssignmentModal = ({ isOpen, onClose, assignment, onSave, courses = [] }) 
 
     setIsSubmitting(true);
     try {
-      await onSave({
-        ...formData,
-        dueDate: new Date(formData.dueDate).toISOString(),
-        weight: parseFloat(formData.weight) || 1
+await onSave({
+        title_c: formData.title,
+        description_c: formData.description,
+        due_date_c: new Date(formData.dueDate).toISOString(),
+        priority_c: formData.priority,
+        type_c: formData.type,
+        weight_c: parseFloat(formData.weight) || 1,
+        completed_c: formData.completed,
+        course_id_c: parseInt(formData.courseId)
       });
       toast.success(`Assignment ${assignment ? "updated" : "added"} successfully!`);
       onClose();

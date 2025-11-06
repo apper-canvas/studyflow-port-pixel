@@ -1,9 +1,25 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { useAuth } from "@/layouts/Root";
+import Button from "@/components/atoms/Button";
 import Sidebar from "@/components/organisms/Sidebar";
 import Header from "@/components/organisms/Header";
 
+const LogoutButton = () => {
+  const { logout } = useAuth();
+  
+  return (
+    <Button
+      variant="outline"
+      size="sm"
+      icon="LogOut"
+      onClick={logout}
+    >
+      Logout
+    </Button>
+  );
+};
 const Layout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -24,10 +40,12 @@ const Layout = () => {
 
       {/* Main content */}
       <div className="lg:pl-64">
-        <Header 
+<Header 
           title="StudyFlow"
           onMenuClick={() => setSidebarOpen(true)}
-        />
+        >
+          <LogoutButton />
+        </Header>
         
         <main className="px-4 sm:px-6 lg:px-8 py-8">
           <Outlet context={outletContext} />

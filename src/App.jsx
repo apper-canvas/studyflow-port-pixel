@@ -1,21 +1,14 @@
+import { RouterProvider } from "react-router-dom";
+import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import { router } from "@/router/index";
+import { store } from "@/store";
 import React from "react";
-import Grades from "@/components/pages/Grades";
-import Dashboard from "@/components/pages/Dashboard";
-import Courses from "@/components/pages/Courses";
-import Assignments from "@/components/pages/Assignments";
-import Calendar from "@/components/pages/Calendar";
-import Layout from "@/components/organisms/Layout";
-
-// Export router for main.jsx
-export { router };
-
-// App component for potential future use
 
 function App() {
   return (
-    <div className="App">
+    <Provider store={store}>
+      <RouterProvider router={router} />
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -29,7 +22,7 @@ function App() {
         theme="light"
         className="z-[9999]"
       />
-    </div>
+    </Provider>
   );
 }
 

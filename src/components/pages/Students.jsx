@@ -24,7 +24,7 @@ const Students = () => {
   const [editingStudent, setEditingStudent] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
@@ -81,14 +81,14 @@ const Students = () => {
   const handleEditStudent = (student) => {
     setEditingStudent(student);
     setFormData({
-      firstName: student.firstName,
+firstName: student.firstName,
       lastName: student.lastName,
       email: student.email,
       phone: student.phone,
       studentId: student.studentId,
       major: student.major,
       year: student.year,
-      gpa: student.gpa.toString(),
+      gpa: student.gpa ? student.gpa.toString() : "",
       status: student.status,
       enrollmentDate: student.enrollmentDate,
       address: student.address,
